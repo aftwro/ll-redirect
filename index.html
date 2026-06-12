@@ -1,214 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nothing to see here</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vote — Lunarlabs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      background: #000;
-      color: #fff;
-      font-family: 'Fixedsys Excelsior', 'Fixedsys', 'Courier New', monospace;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      text-align: center;
-    }
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --border: #242424;
+    --border-hover: #3a3a3a;
+    --text: #e8e8e8;
+    --muted: #666;
+    --dim: #444;
+    --ready: #4ade80;
+    --ready-dim: #166534;
+    --mc: 'Press Start 2P', monospace;
+    --ui: 'Inter', sans-serif;
+  }
 
-    .blink { animation: blink 1s step-end infinite; }
-    @keyframes blink { 50% { opacity: 0; } }
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--ui);
+    font-size: 15px;
+    min-height: 100vh;
+  }
 
-    .scanline {
-      font-size: 11px;
-      color: #555;
-      line-height: 1.8;
-      margin-bottom: 2rem;
-      text-align: left;
-      width: 100%;
-      max-width: 480px;
-      white-space: pre;
-    }
+  .page {
+    max-width: 580px;
+    margin: 0 auto;
+    padding: 3.5rem 1.25rem 4rem;
+  }
 
-    .big { font-size: 1.4rem; margin-bottom: 0.5rem; }
+  /* Header */
+  .header {
+    margin-bottom: 3rem;
+  }
 
-    .sub {
-      font-size: 0.95rem;
-      color: #aaa;
-      margin-bottom: 2rem;
-      line-height: 1.8;
-    }
+  .header-eyebrow {
+    font-family: var(--mc);
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-bottom: 14px;
+  }
 
-    .casefile {
-      border: 1px solid #333;
-      padding: 1rem 1.5rem;
-      max-width: 480px;
-      width: 100%;
-      text-align: left;
-      margin-bottom: 2rem;
-      font-size: 0.85rem;
-      line-height: 2;
-    }
+  .header h1 {
+    font-family: var(--mc);
+    font-size: 21px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
 
-    .label { color: #555; }
-    .val { color: #fff; }
+  .header p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
 
-    .bar-wrap {
-      width: 100%;
-      max-width: 480px;
-      margin-bottom: 2rem;
-      text-align: left;
-      font-size: 0.8rem;
-    }
+  /* Vote list */
+  .vote-list {
+    display: flex;
+    flex-direction: column;
+  }
 
-    .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-    .bar-label { color: #555; width: 140px; flex-shrink: 0; }
-    .bar-bg { flex: 1; height: 10px; background: #111; border: 1px solid #333; }
-    .bar-fill { height: 100%; background: #fff; transition: width 0.05s; }
+  .vote-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border);
+  }
 
-    .btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+  .vote-item:first-child {
+    border-top: 1px solid var(--border);
+  }
 
-    button {
-      background: #000;
-      color: #fff;
-      border: 1px solid #fff;
-      padding: 0.5rem 1.2rem;
-      font-family: 'Fixedsys Excelsior', 'Fixedsys', 'Courier New', monospace;
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
+  .vote-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    flex: 1;
+  }
 
-    button:hover { background: #fff; color: #000; }
+  .vote-index {
+    font-size: 12px;
+    color: var(--dim);
+    width: 16px;
+    flex-shrink: 0;
+    text-align: right;
+  }
 
-    #shame {
-      font-size: 0.8rem;
-      color: #444;
-      margin-top: 1.5rem;
-      min-height: 1.2rem;
-    }
-  </style>
+  .vote-info { min-width: 0; }
+
+  .vote-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+  }
+
+  .vote-host {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* Right side */
+  .vote-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+
+  .countdown {
+    font-size: 13px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    min-width: 72px;
+    text-align: right;
+  }
+
+  .countdown.ready {
+    color: var(--ready);
+  }
+
+  .vote-btn {
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border: 1px solid var(--border-hover);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.12s, border-color 0.12s;
+    white-space: nowrap;
+    border-radius: 0;
+    line-height: 1;
+  }
+
+  .vote-btn:hover {
+    background: #1a1a1a;
+    border-color: #555;
+  }
+
+  .vote-btn.voted {
+    color: var(--dim);
+    border-color: var(--border);
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .vote-btn svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 2.5rem;
+    font-size: 12px;
+    color: var(--dim);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .footer svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+
+  @media (max-width: 480px) {
+    .header h1 { font-size: 15px; }
+    .vote-btn { padding: 8px 12px; font-size: 12px; }
+    .countdown { min-width: 60px; font-size: 12px; }
+  }
+</style>
 </head>
 <body>
+<div class="page">
 
-  <pre class="scanline" id="boot"></pre>
+  <header class="header">
+    <p class="header-eyebrow">play.lunarlabs.fun</p>
+    <h1>Vote for<br>LunarLabs</h1>
+    <p>Cast your vote on each site once every 24 hours.<br>It takes less than a minute and helps us grow.</p>
+  </header>
 
-  <div class="big" id="header" style="display:none">
-    !! INTRUDER DETECTED !!<span class="blink">_</span>
-  </div>
+  <div class="vote-list" id="voteList"></div>
 
-  <div class="sub" id="msg" style="display:none">
-    Stop snooping around. Go back in game.<br>
-    There's nothing much to be found in this domain anyway.<br>
-    <span style="color:#555">(we checked. twice. it's just divs.)</span>
-  </div>
+  <p class="footer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="4"/><path d="M12 9V7m0 0a5 5 0 0 0-5 5H5m7-5a5 5 0 0 1 5 5h2"/><path d="M12 17v1a3 3 0 0 0 3 3h1"/></svg>
+    This page stores cookies to track your vote cooldowns.
+  </p>
 
-  <div class="casefile" id="case" style="display:none">
-    <div style="color:#555; margin-bottom:0.5rem;">-- CASE FILE #00042 --</div>
-    <div><span class="label">SUSPECT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span><span class="val" id="cf-name">Loading...</span></div>
-    <div><span class="label">THREAT LEVEL : </span><span class="val">Mildly Curious</span></div>
-    <div><span class="label">CRIME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span><span class="val">Reading source code on a Friday</span></div>
-    <div><span class="label">MOTIVE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span><span class="val">Unknown. Possibly boredom.</span></div>
-    <div><span class="label">EVIDENCE&nbsp;&nbsp;&nbsp;&nbsp;: </span><span class="val">You're literally here right now</span></div>
-  </div>
+</div>
 
-  <div class="bar-wrap" id="bars" style="display:none">
-    <div style="color:#555; font-size:0.8rem; margin-bottom:0.5rem;">-- THREAT ASSESSMENT --</div>
-    <div class="bar-row"><span class="bar-label">Nosiness</span><div class="bar-bg"><div class="bar-fill" id="b1" style="width:0%"></div></div></div>
-    <div class="bar-row"><span class="bar-label">Audacity</span><div class="bar-bg"><div class="bar-fill" id="b2" style="width:0%"></div></div></div>
-    <div class="bar-row"><span class="bar-label">Finding anything</span><div class="bar-bg"><div class="bar-fill" id="b3" style="width:0%"></div></div></div>
-  </div>
+<script>
+const SITES = [
+  { id: 'v1', name: 'Top Minecraft Servers', host: 'topminecraftservers.org',   url: 'https://topminecraftservers.org/vote/43186',                               offset: 0  },
+  { id: 'v2', name: 'Minecraft Servers',      host: 'minecraftservers.org',      url: 'https://minecraftservers.org/vote/685936',                                  offset: 7  },
+  { id: 'v3', name: 'CurseForge',             host: 'curseforge.com',            url: 'https://www.curseforge.com/servers/minecraft/game/lunarlabs/vote',          offset: 14 },
+  { id: 'v4', name: 'MineRank',               host: 'minerank.com',              url: 'https://www.minerank.com/lunarlabs/vote#vote-now',                          offset: 21 },
+  { id: 'v5', name: 'MC Best Servers',        host: 'minecraftbestservers.com',  url: 'https://minecraftbestservers.com/server-lunarlabs.6781/vote',                offset: 28 },
+  { id: 'v6', name: 'MC Server List',         host: 'minecraft-server-list.com', url: 'https://minecraft-server-list.com/server/519138/vote/',                     offset: 35 },
+];
 
-  <div class="btns" id="btns" style="display:none">
-    <button id="btn-back">[ GO BACK TO MINECRAFT]</button>
-    <button id="btn-deny">[ I WASN'T SNOOPING ]</button>
-  </div>
+const COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
-  <div id="shame"></div>
+function getCookie(name) {
+  const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+  return m ? parseInt(decodeURIComponent(m[1]), 10) : null;
+}
 
-  <script>
-    const names = [
-      "A Suspicious Individual",
-      "An Unknown Entity",
-      "Dave (probably)",
-      "Definitely Not A Developer",
-      "A Curious Gremlin",
-      "Player #4192",
-      "The Void, Staring Back"
-    ];
+function setCookie(name, val) {
+  const exp = new Date(Date.now() + 48 * 3600 * 1000).toUTCString();
+  document.cookie = name + '=' + encodeURIComponent(val) + '; expires=' + exp + '; path=/; SameSite=Lax';
+}
 
-    const bootLines = [
-      "INITIALIZING SECURITY PROTOCOL v0.0.1...",
-      "SCANNING FOR INTRUDERS...",
-      "oh.",
-      "oh no.",
-      "yep. there's one.",
-      "RUNNING THREAT ANALYSIS...",
-      "COMPILING SHAME REPORT...",
-      "DONE.",
-      ""
-    ];
+function pad(n) { return String(n).padStart(2, '0'); }
 
-    const shames = [
-      "you weren't snooping? you are literally in the source code right now.",
-      "outstanding denial. truly. zero credibility.",
-      "the logs disagree.",
-      "sure buddy.",
-      "we've noted your protest. in the shame ledger.",
-      "a bold claim from someone inside a <div>.",
-    ];
+function remaining(site) {
+  const t = getCookie(site.id);
+  if (!t) return 0;
+  const needed = COOLDOWN_MS + site.offset * 60 * 1000;
+  return Math.max(0, needed - (Date.now() - t));
+}
 
-    let shameCount = 0;
+function isReady(site) { return remaining(site) === 0; }
 
-    async function boot() {
-      const el = document.getElementById('boot');
-      for (const line of bootLines) {
-        await delay(line === '' ? 100 : 280 + Math.random() * 180);
-        el.textContent += line + '\n';
-      }
-      document.getElementById('header').style.display = 'block';
-      await delay(400);
-      document.getElementById('case').style.display = 'block';
-      document.getElementById('cf-name').textContent = names[Math.floor(Math.random() * names.length)];
-      await delay(500);
-      document.getElementById('msg').style.display = 'block';
-      await delay(400);
-      document.getElementById('bars').style.display = 'block';
-      animateBars();
-      await delay(800);
-      document.getElementById('btns').style.display = 'flex';
-    }
+function fmtRemaining(ms) {
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  return pad(h) + ':' + pad(m) + ':' + pad(s);
+}
 
-    function animateBars() {
-      const targets = [92, 87, 3];
-      const ids = ['b1', 'b2', 'b3'];
-      ids.forEach((id, i) => {
-        let w = 0;
-        const target = targets[i];
-        const step = () => {
-          w = Math.min(w + 2 + Math.random() * 3, target);
-          document.getElementById(id).style.width = Math.round(w) + '%';
-          if (w < target) requestAnimationFrame(step);
-        };
-        setTimeout(() => requestAnimationFrame(step), i * 200);
+const ICON_EXTERNAL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
+const ICON_CHECK    = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+function buildItems() {
+  const list = document.getElementById('voteList');
+  list.innerHTML = '';
+  SITES.forEach((s, i) => {
+    const ready = isReady(s);
+    const rem   = remaining(s);
+
+    const item = document.createElement('div');
+    item.className = 'vote-item';
+    item.dataset.idx = i;
+    item.innerHTML = `
+      <div class="vote-left">
+        <span class="vote-index">${i + 1}</span>
+        <div class="vote-info">
+          <div class="vote-name">${s.name}</div>
+          <div class="vote-host">${s.host}</div>
+        </div>
+      </div>
+      <div class="vote-right">
+        <span class="countdown ${ready ? 'ready' : ''}">${ready ? 'Ready' : fmtRemaining(rem)}</span>
+        <a href="${s.url}" target="_blank" rel="noopener noreferrer"
+           class="vote-btn ${ready ? '' : 'voted'}"
+           data-id="${s.id}">
+          ${ready ? ICON_EXTERNAL + 'Vote' : ICON_CHECK + 'Voted'}
+        </a>
+      </div>
+    `;
+
+    const btn = item.querySelector('.vote-btn');
+    if (ready) {
+      btn.addEventListener('click', () => {
+        setCookie(s.id, Date.now());
+        setTimeout(tick, 200);
       });
     }
 
-    function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+    list.appendChild(item);
+  });
+}
 
-    document.getElementById('btn-back').addEventListener('click', () => {
-      document.getElementById('shame').textContent = 'wise choice. we will not speak of this.';
-    });
+function tick() {
+  const items = document.querySelectorAll('.vote-item');
+  items.forEach((el, i) => {
+    const s     = SITES[i];
+    const ready = isReady(s);
+    const rem   = remaining(s);
+    const cd    = el.querySelector('.countdown');
+    const btn   = el.querySelector('.vote-btn');
 
-    document.getElementById('btn-deny').addEventListener('click', () => {
-      document.getElementById('shame').textContent = shames[shameCount % shames.length];
-      shameCount++;
-    });
+    if (ready) {
+      cd.textContent = 'Ready';
+      cd.className = 'countdown ready';
+      if (btn.classList.contains('voted')) {
+        btn.classList.remove('voted');
+        btn.innerHTML = ICON_EXTERNAL + 'Vote';
+        btn.addEventListener('click', () => {
+          setCookie(s.id, Date.now());
+          setTimeout(tick, 200);
+        });
+      }
+    } else {
+      cd.textContent = fmtRemaining(rem);
+      cd.className = 'countdown';
+    }
+  });
+}
 
-    boot();
-  </script>
+buildItems();
+setInterval(tick, 1000);
+</script>
 </body>
 </html>
