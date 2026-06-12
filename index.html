@@ -3,332 +3,392 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vote — Lunarlabs</title>
+<title>Vote — LunarLabs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #0a0a0a;
-    --surface: #111111;
-    --border: #242424;
-    --border-hover: #3a3a3a;
-    --text: #e8e8e8;
-    --muted: #666;
-    --dim: #444;
-    --ready: #4ade80;
-    --ready-dim: #166534;
-    --mc: 'Press Start 2P', monospace;
-    --ui: 'Inter', sans-serif;
-  }
-
-  html, body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--ui);
-    font-size: 15px;
-    min-height: 100vh;
-  }
-
-  .page {
-    max-width: 580px;
-    margin: 0 auto;
-    padding: 3.5rem 1.25rem 4rem;
-  }
-
-  /* Header */
-  .header {
-    margin-bottom: 3rem;
-  }
-
-  .header-eyebrow {
-    font-family: var(--mc);
-    font-size: 9px;
-    color: var(--muted);
-    letter-spacing: 0.06em;
-    margin-bottom: 14px;
-  }
-
-  .header h1 {
-    font-family: var(--mc);
-    font-size: 21px;
-    color: var(--text);
-    line-height: 1.6;
-    margin-bottom: 12px;
-  }
-
-  .header p {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  /* Vote list */
-  .vote-list {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .vote-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 15px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .vote-item:first-child {
-    border-top: 1px solid var(--border);
-  }
-
-  .vote-left {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    min-width: 0;
-    flex: 1;
-  }
-
-  .vote-index {
-    font-size: 12px;
-    color: var(--dim);
-    width: 16px;
-    flex-shrink: 0;
-    text-align: right;
-  }
-
-  .vote-info { min-width: 0; }
-
-  .vote-name {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 2px;
-  }
-
-  .vote-host {
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  /* Right side */
-  .vote-right {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    flex-shrink: 0;
-  }
-
-  .countdown {
-    font-size: 13px;
-    color: var(--muted);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-    min-width: 72px;
-    text-align: right;
-  }
-
-  .countdown.ready {
-    color: var(--ready);
-  }
-
-  .vote-btn {
-    font-size: 13px;
-    font-weight: 500;
-    padding: 8px 18px;
-    border: 1px solid var(--border-hover);
-    background: transparent;
-    color: var(--text);
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: background 0.12s, border-color 0.12s;
-    white-space: nowrap;
-    border-radius: 0;
-    line-height: 1;
-  }
-
-  .vote-btn:hover {
-    background: #1a1a1a;
-    border-color: #555;
-  }
-
-  .vote-btn.voted {
-    color: var(--dim);
-    border-color: var(--border);
-    pointer-events: none;
-    cursor: default;
-  }
-
-  .vote-btn svg {
-    width: 13px;
-    height: 13px;
-    flex-shrink: 0;
-  }
-
-  /* Footer */
-  .footer {
-    margin-top: 2.5rem;
-    font-size: 12px;
-    color: var(--dim);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .footer svg {
-    width: 13px;
-    height: 13px;
-    flex-shrink: 0;
-    opacity: 0.5;
-  }
-
-  @media (max-width: 480px) {
-    .header h1 { font-size: 15px; }
-    .vote-btn { padding: 8px 12px; font-size: 12px; }
-    .countdown { min-width: 60px; font-size: 12px; }
-  }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;--surface:#111;--border:#242424;--border-h:#3a3a3a;
+  --text:#e8e8e8;--muted:#666;--dim:#3a3a3a;
+  --green:#4ade80;--green-d:#16a34a;--blue:#60a5fa;--red:#f87171;
+  --mc:'Press Start 2P',monospace;--ui:'Inter',sans-serif;
+}
+html,body{background:var(--bg);color:var(--text);font-family:var(--ui);font-size:15px;min-height:100vh}
+.page{max-width:580px;margin:0 auto;padding:3.5rem 1.25rem 4rem}
+.header{margin-bottom:3rem}
+.eyebrow{font-family:var(--mc);font-size:9px;color:var(--muted);letter-spacing:.06em;margin-bottom:14px;cursor:default;user-select:none}
+.header h1{font-family:var(--mc);font-size:21px;color:var(--text);line-height:1.6;margin-bottom:12px}
+.header p{font-size:14px;color:var(--muted);line-height:1.6}
+.vote-list{display:flex;flex-direction:column}
+.vote-item{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 0;border-bottom:1px solid var(--border)}
+.vote-item:first-child{border-top:1px solid var(--border)}
+.vote-left{display:flex;align-items:center;gap:14px;min-width:0;flex:1}
+.vote-index{font-size:12px;color:var(--dim);width:16px;flex-shrink:0;text-align:right}
+.vote-info{min-width:0}
+.vote-name{font-size:14px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.vote-host{font-size:12px;color:var(--muted)}
+.vote-right{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.countdown{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;letter-spacing:.02em;white-space:nowrap;min-width:72px;text-align:right}
+.countdown.ready{color:var(--green)}
+.vote-btn{font-size:13px;font-weight:500;padding:8px 18px;border:1px solid var(--border-h);background:transparent;color:var(--text);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:background .12s,border-color .12s;white-space:nowrap;border-radius:0;line-height:1}
+.vote-btn:hover{background:#1a1a1a;border-color:#555}
+.vote-btn.voted{color:var(--dim);border-color:var(--border);pointer-events:none}
+.vote-btn svg{width:13px;height:13px;flex-shrink:0}
+.footer{margin-top:2.5rem;font-size:12px;color:#3a3a3a;display:flex;align-items:center;gap:6px}
+.footer-cookie{cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:color .15s;position:relative}
+.footer-cookie:hover{color:#666}
+.footer-cookie svg{width:13px;height:13px;flex-shrink:0;opacity:.5}
+.cookie-badge{position:absolute;top:-8px;right:-28px;background:var(--surface);border:1px solid var(--border);font-size:10px;color:var(--muted);padding:1px 5px;display:none;white-space:nowrap}
+.cookie-badge.visible{display:block}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .15s}
+.modal-backdrop.open{opacity:1;pointer-events:all}
+.modal-box{background:var(--surface);border:1px solid var(--border-h);display:flex;flex-direction:column;transform:scale(.97);transition:transform .15s}
+.modal-backdrop.open .modal-box{transform:scale(1)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border)}
+.modal-title{font-family:var(--mc);font-size:9px;color:var(--text);letter-spacing:.04em}
+.modal-meta{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.modal-close{background:transparent;border:none;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;padding:0 2px;transition:color .1s}
+.modal-close:hover{color:var(--text)}
+#snakeCanvas{display:block}
+.modal-hint{padding:8px 14px;font-size:11px;color:var(--dim);border-top:1px solid var(--border);text-align:center}
+.canvas-wrap{position:relative}
+.snake-over{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.78);pointer-events:none;opacity:0;transition:opacity .2s}
+.snake-over.show{opacity:1;pointer-events:all}
+.snake-over-title{font-family:var(--mc);font-size:11px;color:var(--red);margin-bottom:16px}
+.snake-over-score{font-size:13px;color:var(--muted);margin-bottom:20px}
+.snake-over button{font-family:var(--mc);font-size:8px;padding:12px 20px;background:transparent;border:1px solid var(--border-h);color:var(--text);cursor:pointer;border-radius:0}
+.snake-over button:hover{background:#1a1a1a}
+.mc-console{position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,.85);z-index:200;display:none;flex-direction:column;border-top:1px solid #1c1c1c;max-height:40vh}
+.mc-console.open{display:flex}
+.console-history{overflow-y:auto;padding:8px 12px 4px;display:flex;flex-direction:column;gap:1px;flex:1}
+.console-line{font-family:var(--ui);font-size:13px;line-height:1.5}
+.console-line.t-out{color:var(--text)}
+.console-line.t-sys{color:var(--green)}
+.console-line.t-err{color:var(--red)}
+.console-line.t-info{color:var(--blue)}
+.console-line.t-cmd{color:#444}
+.console-irow{display:flex;align-items:center;gap:6px;padding:6px 12px 10px;border-top:1px solid #1a1a1a}
+.console-prompt{font-size:14px;color:var(--green);font-weight:500}
+#consoleInput{background:transparent;border:none;outline:none;color:var(--text);font-family:var(--ui);font-size:13px;flex:1;caret-color:var(--green)}
+@keyframes thunder{0%,100%{opacity:1}10%,30%{opacity:.08}20%,40%{opacity:.9}}
+@keyframes dayflash{0%,100%{filter:brightness(1)}50%{filter:brightness(2.8)}}
+.thunder{animation:thunder .65s ease}
+.dayflash{animation:dayflash .5s ease}
+@media(max-width:480px){
+  .header h1{font-size:15px}
+  .vote-btn{padding:8px 12px;font-size:12px}
+  .countdown{min-width:60px;font-size:12px}
+}
 </style>
 </head>
 <body>
 <div class="page">
-
   <header class="header">
-    <p class="header-eyebrow">play.lunarlabs.fun</p>
+    <p class="eyebrow" id="eyebrow">play.lunarlabs.fun</p>
     <h1>Vote for<br>LunarLabs</h1>
     <p>Cast your vote on each site once every 24 hours.<br>It takes less than a minute and helps us grow.</p>
   </header>
-
   <div class="vote-list" id="voteList"></div>
-
   <p class="footer">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="4"/><path d="M12 9V7m0 0a5 5 0 0 0-5 5H5m7-5a5 5 0 0 1 5 5h2"/><path d="M12 17v1a3 3 0 0 0 3 3h1"/></svg>
-    This page stores cookies to track your vote cooldowns.
+    <span class="footer-cookie" id="cookieTrigger">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="4"/><path d="M12 9V7m0 0a5 5 0 0 0-5 5H5m7-5a5 5 0 0 1 5 5h2"/><path d="M12 17v1a3 3 0 0 0 3 3h1"/></svg>
+      This page stores cookies to track your vote cooldowns. You should definitely try the Konami code or press slash (/)
+      <span class="cookie-badge" id="cookieBadge">0</span>
+    </span>
   </p>
+</div>
 
+<div class="modal-backdrop" id="snakeModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">snake.exe</span>
+      <span class="modal-meta">score <b id="snakeScore">0</b> &nbsp;·&nbsp; best <b id="snakeBest">0</b></span>
+      <button class="modal-close" id="snakeClose">×</button>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="snakeCanvas"></canvas>
+      <div class="snake-over" id="snakeOver">
+        <p class="snake-over-title">you died</p>
+        <p class="snake-over-score" id="snakeOverScore"></p>
+        <button id="snakeRestart">play again</button>
+      </div>
+    </div>
+    <p class="modal-hint">wasd · arrow keys · esc to close</p>
+  </div>
+</div>
+
+<div class="mc-console" id="mcConsole">
+  <div class="console-history" id="consoleHistory"></div>
+  <div class="console-irow">
+    <span class="console-prompt">/</span>
+    <input id="consoleInput" type="text" autocomplete="off" spellcheck="false" placeholder="enter command…">
+  </div>
 </div>
 
 <script>
-const SITES = [
-  { id: 'v1', name: 'Top Minecraft Servers', host: 'topminecraftservers.org',   url: 'https://topminecraftservers.org/vote/43186',                               offset: 0  },
-  { id: 'v2', name: 'Minecraft Servers',      host: 'minecraftservers.org',      url: 'https://minecraftservers.org/vote/685936',                                  offset: 7  },
-  { id: 'v3', name: 'CurseForge',             host: 'curseforge.com',            url: 'https://www.curseforge.com/servers/minecraft/game/lunarlabs/vote',          offset: 14 },
-  { id: 'v4', name: 'MineRank',               host: 'minerank.com',              url: 'https://www.minerank.com/lunarlabs/vote#vote-now',                          offset: 21 },
-  { id: 'v5', name: 'MC Best Servers',        host: 'minecraftbestservers.com',  url: 'https://minecraftbestservers.com/server-lunarlabs.6781/vote',                offset: 28 },
-  { id: 'v6', name: 'MC Server List',         host: 'minecraft-server-list.com', url: 'https://minecraft-server-list.com/server/519138/vote/',                     offset: 35 },
+// ── VOTE LOGIC ──────────────────────────────────────────────────────────────
+const SITES=[
+  {id:'v1',name:'Top Minecraft Servers',host:'topminecraftservers.org',  url:'https://topminecraftservers.org/vote/43186',offset:0},
+  {id:'v2',name:'Minecraft Servers',    host:'minecraftservers.org',     url:'https://minecraftservers.org/vote/685936',offset:7},
+  {id:'v3',name:'CurseForge',           host:'curseforge.com',           url:'https://www.curseforge.com/servers/minecraft/game/lunarlabs/vote',offset:14},
+  {id:'v4',name:'MineRank',             host:'minerank.com',             url:'https://www.minerank.com/lunarlabs/vote#vote-now',offset:21},
+  {id:'v5',name:'MC Best Servers',      host:'minecraftbestservers.com', url:'https://minecraftbestservers.com/server-lunarlabs.6781/vote',offset:28},
+  {id:'v6',name:'MC Server List',       host:'minecraft-server-list.com',url:'https://minecraft-server-list.com/server/519138/vote/',offset:35},
 ];
-
-const COOLDOWN_MS = 24 * 60 * 60 * 1000;
-
-function getCookie(name) {
-  const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
-  return m ? parseInt(decodeURIComponent(m[1]), 10) : null;
-}
-
-function setCookie(name, val) {
-  const exp = new Date(Date.now() + 48 * 3600 * 1000).toUTCString();
-  document.cookie = name + '=' + encodeURIComponent(val) + '; expires=' + exp + '; path=/; SameSite=Lax';
-}
-
-function pad(n) { return String(n).padStart(2, '0'); }
-
-function remaining(site) {
-  const t = getCookie(site.id);
-  if (!t) return 0;
-  const needed = COOLDOWN_MS + site.offset * 60 * 1000;
-  return Math.max(0, needed - (Date.now() - t));
-}
-
-function isReady(site) { return remaining(site) === 0; }
-
-function fmtRemaining(ms) {
-  const h = Math.floor(ms / 3600000);
-  const m = Math.floor((ms % 3600000) / 60000);
-  const s = Math.floor((ms % 60000) / 1000);
-  return pad(h) + ':' + pad(m) + ':' + pad(s);
-}
-
-const ICON_EXTERNAL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
-const ICON_CHECK    = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>`;
-
-function buildItems() {
-  const list = document.getElementById('voteList');
-  list.innerHTML = '';
-  SITES.forEach((s, i) => {
-    const ready = isReady(s);
-    const rem   = remaining(s);
-
-    const item = document.createElement('div');
-    item.className = 'vote-item';
-    item.dataset.idx = i;
-    item.innerHTML = `
-      <div class="vote-left">
-        <span class="vote-index">${i + 1}</span>
-        <div class="vote-info">
-          <div class="vote-name">${s.name}</div>
-          <div class="vote-host">${s.host}</div>
-        </div>
-      </div>
-      <div class="vote-right">
-        <span class="countdown ${ready ? 'ready' : ''}">${ready ? 'Ready' : fmtRemaining(rem)}</span>
-        <a href="${s.url}" target="_blank" rel="noopener noreferrer"
-           class="vote-btn ${ready ? '' : 'voted'}"
-           data-id="${s.id}">
-          ${ready ? ICON_EXTERNAL + 'Vote' : ICON_CHECK + 'Voted'}
-        </a>
-      </div>
-    `;
-
-    const btn = item.querySelector('.vote-btn');
-    if (ready) {
-      btn.addEventListener('click', () => {
-        setCookie(s.id, Date.now());
-        setTimeout(tick, 200);
-      });
-    }
-
-    list.appendChild(item);
+const CD=24*60*60*1000;
+function gc(n){const m=document.cookie.match(new RegExp('(?:^|; )'+n+'=([^;]*)'));return m?parseInt(decodeURIComponent(m[1]),10):null}
+function sc(n,v,h){const e=new Date(Date.now()+(h||48)*3600*1000).toUTCString();document.cookie=n+'='+encodeURIComponent(v)+'; expires='+e+'; path=/; SameSite=Lax'}
+function pad(n){return String(n).padStart(2,'0')}
+function rem(s){const t=gc(s.id);if(!t)return 0;return Math.max(0,(CD+s.offset*60000)-(Date.now()-t))}
+function rdy(s){return rem(s)===0}
+function fmt(ms){const h=ms/3600000|0,m=(ms%3600000)/60000|0,s=(ms%60000)/1000|0;return pad(h)+':'+pad(m)+':'+pad(s)}
+const IEXT=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
+const ICHK=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+function buildVotes(){
+  const list=document.getElementById('voteList');
+  list.innerHTML='';
+  SITES.forEach((s,i)=>{
+    const ready=rdy(s),r=rem(s);
+    const el=document.createElement('div');
+    el.className='vote-item';el.dataset.idx=i;
+    el.innerHTML=`<div class="vote-left"><span class="vote-index">${i+1}</span><div class="vote-info"><div class="vote-name">${s.name}</div><div class="vote-host">${s.host}</div></div></div><div class="vote-right"><span class="countdown ${ready?'ready':''}">${ready?'Ready':fmt(r)}</span><a href="${s.url}" target="_blank" rel="noopener noreferrer" class="vote-btn ${ready?'':'voted'}" data-id="${s.id}">${ready?IEXT+'Vote':ICHK+'Voted'}</a></div>`;
+    if(ready)el.querySelector('.vote-btn').addEventListener('click',()=>{sc(s.id,Date.now());setTimeout(tickVotes,200)});
+    list.appendChild(el);
   });
 }
-
-function tick() {
-  const items = document.querySelectorAll('.vote-item');
-  items.forEach((el, i) => {
-    const s     = SITES[i];
-    const ready = isReady(s);
-    const rem   = remaining(s);
-    const cd    = el.querySelector('.countdown');
-    const btn   = el.querySelector('.vote-btn');
-
-    if (ready) {
-      cd.textContent = 'Ready';
-      cd.className = 'countdown ready';
-      if (btn.classList.contains('voted')) {
-        btn.classList.remove('voted');
-        btn.innerHTML = ICON_EXTERNAL + 'Vote';
-        btn.addEventListener('click', () => {
-          setCookie(s.id, Date.now());
-          setTimeout(tick, 200);
-        });
+function tickVotes(){
+  document.querySelectorAll('.vote-item').forEach((el,i)=>{
+    const s=SITES[i],ready=rdy(s),r=rem(s);
+    const cd=el.querySelector('.countdown'),btn=el.querySelector('.vote-btn');
+    if(ready){
+      cd.textContent='Ready';cd.className='countdown ready';
+      if(btn.classList.contains('voted')){
+        btn.classList.remove('voted');btn.innerHTML=IEXT+'Vote';
+        btn.addEventListener('click',()=>{sc(s.id,Date.now());setTimeout(tickVotes,200)});
       }
-    } else {
-      cd.textContent = fmtRemaining(rem);
-      cd.className = 'countdown';
-    }
+    }else{cd.textContent=fmt(r);cd.className='countdown'}
   });
 }
+buildVotes();
+setInterval(tickVotes,1000);
 
-buildItems();
-setInterval(tick, 1000);
+// ── SNAKE ───────────────────────────────────────────────────────────────────
+(function(){
+  const COLS=22,ROWS=18,CELL=20;
+  const canvas=document.getElementById('snakeCanvas');
+  canvas.width=COLS*CELL;canvas.height=ROWS*CELL;
+  const ctx=canvas.getContext('2d');
+  const modal=document.getElementById('snakeModal');
+  const scoreEl=document.getElementById('snakeScore');
+  const bestEl=document.getElementById('snakeBest');
+  const overEl=document.getElementById('snakeOver');
+  const overScore=document.getElementById('snakeOverScore');
+  let snake,dir,nextDir,food,score,loop,state;
+  let best=gc('snakeBest')||0;
+  bestEl.textContent=best;
+
+  function rndFood(){
+    let p;
+    do{p={x:Math.random()*COLS|0,y:Math.random()*ROWS|0}}
+    while(snake.some(s=>s.x===p.x&&s.y===p.y));
+    return p;
+  }
+  function init(){
+    snake=[{x:11,y:9},{x:10,y:9},{x:9,y:9}];
+    dir={x:1,y:0};nextDir={x:1,y:0};
+    food=rndFood();score=0;state='playing';
+    scoreEl.textContent=0;overEl.classList.remove('show');
+    if(loop)clearInterval(loop);
+    loop=setInterval(step,110);draw();
+  }
+  function step(){
+    if(state!=='playing')return;
+    dir=nextDir;
+    const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
+    if(head.x<0||head.x>=COLS||head.y<0||head.y>=ROWS||snake.some(s=>s.x===head.x&&s.y===head.y)){
+      state='dead';clearInterval(loop);
+      if(score>best){best=score;sc('snakeBest',best);bestEl.textContent=best}
+      overScore.textContent='score: '+score+(score>0&&score>=best?' — new best!':'');
+      overEl.classList.add('show');return;
+    }
+    snake.unshift(head);
+    if(head.x===food.x&&head.y===food.y){score++;scoreEl.textContent=score;food=rndFood()}
+    else snake.pop();
+    draw();
+  }
+  function draw(){
+    ctx.fillStyle='#0a0a0a';ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.strokeStyle='#141414';ctx.lineWidth=.5;
+    for(let x=0;x<=COLS;x++){ctx.beginPath();ctx.moveTo(x*CELL,0);ctx.lineTo(x*CELL,ROWS*CELL);ctx.stroke()}
+    for(let y=0;y<=ROWS;y++){ctx.beginPath();ctx.moveTo(0,y*CELL);ctx.lineTo(COLS*CELL,y*CELL);ctx.stroke()}
+    ctx.fillStyle='#60a5fa';
+    const cx=food.x*CELL+CELL/2,cy=food.y*CELL+CELL/2,r=CELL/2-3;
+    ctx.beginPath();ctx.moveTo(cx,cy-r);ctx.lineTo(cx+r,cy);ctx.lineTo(cx,cy+r);ctx.lineTo(cx-r,cy);ctx.closePath();ctx.fill();
+    snake.forEach((seg,i)=>{
+      ctx.fillStyle=state==='dead'?'#444':(i===0?'#4ade80':'#16a34a');
+      ctx.fillRect(seg.x*CELL+1,seg.y*CELL+1,CELL-2,CELL-2);
+      if(i===0&&state!=='dead'){
+        ctx.fillStyle='#0a0a0a';
+        const lx=dir.x===1?13:dir.x===-1?3:4,ly=dir.y===1?13:dir.y===-1?3:4;
+        const rx=dir.x===1?13:dir.x===-1?3:12,ry=dir.y===1?13:dir.y===-1?3:12;
+        ctx.fillRect(seg.x*CELL+lx-1,seg.y*CELL+ly-1,3,3);
+        ctx.fillRect(seg.x*CELL+rx-1,seg.y*CELL+ry-1,3,3);
+      }
+    });
+  }
+  function onKey(e){
+    if(!modal.classList.contains('open'))return;
+    const map={ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0},w:{x:0,y:-1},s:{x:0,y:1},a:{x:-1,y:0},d:{x:1,y:0},W:{x:0,y:-1},S:{x:0,y:1},A:{x:-1,y:0},D:{x:1,y:0}};
+    if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key))e.preventDefault();
+    if(e.key==='Escape'){closeSnake();return}
+    if(map[e.key]){const d=map[e.key];if(d.x!==0&&dir.x===0)nextDir=d;else if(d.y!==0&&dir.y===0)nextDir=d}
+  }
+  function openSnake(){modal.classList.add('open');init()}
+  function closeSnake(){modal.classList.remove('open');if(loop)clearInterval(loop)}
+  document.getElementById('snakeClose').addEventListener('click',closeSnake);
+  document.getElementById('snakeRestart').addEventListener('click',init);
+  modal.addEventListener('click',e=>{if(e.target===modal)closeSnake()});
+  document.addEventListener('keydown',onKey);
+  window._openSnake=openSnake;
+})();
+
+// ── COMMAND CONSOLE ─────────────────────────────────────────────────────────
+(function(){
+  const con=document.getElementById('mcConsole');
+  const hist=document.getElementById('consoleHistory');
+  const inp=document.getElementById('consoleInput');
+  let open=false,iHist=[],hIdx=-1;
+
+  function line(text,type){
+    const el=document.createElement('div');
+    el.className='console-line '+(type||'t-out');
+    el.textContent=text;hist.appendChild(el);
+    hist.scrollTop=hist.scrollHeight;
+  }
+  function openCon(){
+    open=true;con.classList.add('open');inp.value='';inp.focus();
+    if(!hist.children.length){
+      line('LunarLabs server console — type /help','t-sys');
+      line('──────────────────────────────','t-cmd');
+    }
+  }
+  function closeCon(){open=false;con.classList.remove('open')}
+
+  const C={
+    help(){return[['Available commands:','t-sys'],['/vote  /ip  /list  /seed  /version  /plugins','t-out'],['/give  /tp  /gamemode  /time  /weather','t-out'],['/say  /me  /ban  /op  /stop  /kill  /snake  /discord','t-out']]},
+    vote(){return[['Use the links above. Every vote helps.','t-sys']]},
+    ip(){return[['play.lunarlabs.fun','t-sys']]},
+    discord(){return[['discord.gg/lunarlabsmc','t-sys']]},
+    list(){return[['Players online: 1 / ∞','t-out'],['  LunarLabs [you]','t-sys']]},
+    seed(){return[['World seed: '+(Math.random()*1e16|0).toString(),'t-sys']]},
+    version(){return[['LunarLabs 1.21.1 (Purpur)','t-sys'],['Java 21','t-out']]},
+    plugins(){return[['Loaded plugins (24):','t-sys'],['EconomyShopGUI, EcoItems, EcoEnchants, LuckPerms','t-out'],['PlaceholderAPI, Vault, Skript, skript-reflect, SkBee','t-out'],['WorldGuard, WorldEdit, FAWE, and 12 more','t-out']]},
+    stop(){return[['Nice try. Only ops can stop the server.','t-err']]},
+    kill(a){if(a[0]==='@a')return[['Killed all players. (nothing happened)','t-err']];return[['You cannot kill what has no life.','t-out']]},
+    op(a){if(!a[0])return[['Usage: /op <player>','t-err']];return[[a[0]+' is already op.','t-err']]},
+    ban(a){if(!a[0])return[['Usage: /ban <player>','t-err']];return[['Banned player '+a[0]+'. (not really)','t-out'],['This server runs on forgiveness.','t-out']]},
+    give(a){if(!a[0])return[['Usage: /give <player> <item> [amount]','t-err']];return[['Gave '+(a[2]||1)+'x '+(a[1]||'air')+' to '+a[0]+'.','t-out'],['(inventory is not real)','t-cmd']]},
+    tp(a){if(a.length>=3)return[['Teleported to '+a.slice(0,3).join(' ')+'.','t-sys']];return[['Usage: /tp <x> <y> <z>','t-err']]},
+    say(a){if(!a.length)return[['Usage: /say <message>','t-err']];return[['[LunarLabs] '+a.join(' '),'t-info']]},
+    me(a){if(!a.length)return[['Usage: /me <action>','t-err']];return[['* Player '+a.join(' '),'t-info']]},
+    gamemode(a){
+      const m=a[0];
+      if(m==='creative')return[['Denied. This is survival.','t-err']];
+      if(m==='spectator')return[['You are not allowed to spectate your own life.','t-err']];
+      if(m==='survival'||m==='0')return[['You are already suffering.','t-out']];
+      return[['Usage: /gamemode <creative|survival|spectator>','t-err']];
+    },
+    time(a){
+      if(a[0]==='set'&&a[1]==='day'){document.body.classList.add('dayflash');setTimeout(()=>document.body.classList.remove('dayflash'),600);return[['Time set to day.','t-sys']]}
+      if(a[0]==='set'&&a[1]==='night')return[['It is already night in your browser.','t-out']];
+      return[['Usage: /time set <day|night>','t-err']];
+    },
+    weather(a){
+      const w=a[0];
+      if(w==='clear')return[["Weather cleared. You're still indoors.",'t-sys']];
+      if(w==='rain')return[["It started raining. You can't see it. You're in a browser.",'t-out']];
+      if(w==='thunder'){document.body.classList.add('thunder');setTimeout(()=>document.body.classList.remove('thunder'),700);return[['Thunder incoming.','t-sys']]}
+      return[['Usage: /weather <clear|rain|thunder>','t-err']];
+    },
+    snake(){window._openSnake();closeCon();return[]},
+    deop(a){if(!a[0])return[['Usage: /deop <player>','t-err']];return[[a[0]+' is too powerful to deop.','t-err']]},
+    whitelist(){return[['Whitelist is disabled. Anyone can join.','t-out']]},
+    motd(){return[['Welcome to LunarLabs!','t-sys'],['A tycoon/generators server — play.lunarlabs.fun','t-out']]},
+  };
+
+  function run(raw){
+    raw=raw.trim();if(!raw)return;
+    iHist.unshift(raw);hIdx=-1;
+    line('/'+raw,'t-cmd');
+    const parts=raw.split(/\s+/);
+    const cmd=parts[0].toLowerCase();
+    const args=parts.slice(1);
+    if(C[cmd]){const lines=C[cmd](args)||[];lines.forEach(([t,c])=>line(t,c))}
+    else{line('Unknown command: /'+cmd,'t-err');line('Type /help for a list of commands.','t-cmd')}
+  }
+
+  inp.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){run(inp.value);inp.value=''}
+    else if(e.key==='Escape')closeCon();
+    else if(e.key==='ArrowUp'){if(iHist.length){hIdx=Math.min(hIdx+1,iHist.length-1);inp.value=iHist[hIdx]}}
+    else if(e.key==='ArrowDown'){hIdx=Math.max(hIdx-1,-1);inp.value=hIdx>=0?iHist[hIdx]:''}
+  });
+  document.addEventListener('keydown',e=>{
+    const snakeOpen=document.getElementById('snakeModal').classList.contains('open');
+    if(snakeOpen)return;
+    if(e.key==='/'&&!open&&document.activeElement!==inp){e.preventDefault();openCon()}
+    else if(e.key==='Escape'&&open)closeCon();
+  });
+  window._openConsole=openCon;
+  window._consoleLine=line;
+})();
+
+// ── COOKIE CLICKER ──────────────────────────────────────────────────────────
+(function(){
+  const trigger=document.getElementById('cookieTrigger');
+  const badge=document.getElementById('cookieBadge');
+  let count=gc('cookieClicks')||0;
+  const msgs={1:'you found the cookie.',10:'dedicated.',50:'okay but have you voted yet?',100:'there is no reward.',250:'cookie enthusiast.',500:'you win. (there is no prize)',1000:'fine.',2000:'please stop.',5000:'...'};
+  function update(){
+    badge.textContent=count;badge.classList.add('visible');
+    sc('cookieClicks',count);
+    if(msgs[count]){badge.textContent=msgs[count];setTimeout(()=>{badge.textContent=count},2400)}
+  }
+  trigger.addEventListener('click',()=>{count++;update()});
+  if(count>0){badge.textContent=count;badge.classList.add('visible')}
+})();
+
+// ── EASTER EGG TRIGGERS ─────────────────────────────────────────────────────
+
+// Konami code → Snake
+(function(){
+  const seq=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let idx=0;
+  document.addEventListener('keydown',e=>{
+    if(e.key===seq[idx]){idx++;if(idx===seq.length){idx=0;window._openSnake()}}
+    else idx=e.key===seq[0]?1:0;
+  });
+})();
+
+// Click eyebrow 7× → open console with welcome message
+(function(){
+  let clicks=0,t;
+  document.getElementById('eyebrow').addEventListener('click',()=>{
+    clicks++;clearTimeout(t);t=setTimeout(()=>{clicks=0},1200);
+    if(clicks>=7){
+      clicks=0;window._openConsole();
+      setTimeout(()=>{
+        document.getElementById('consoleHistory').innerHTML='';
+        window._consoleLine('you found the console.','t-sys');
+        window._consoleLine('type /help to see available commands.','t-out');
+        window._consoleLine('or /snake if you\'re bored.','t-out');
+        window._consoleLine('──────────────────────────────','t-cmd');
+      },40);
+    }
+  });
+})();
 </script>
 </body>
 </html>
