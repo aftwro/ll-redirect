@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nothing to see here</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Fixedsys Excelsior', 'Fixedsys', 'Courier New', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .blink { animation: blink 1s step-end infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .scanline {
+      font-size: 11px;
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      text-align: left;
+      width: 100%;
+      max-width: 480px;
+      white-space: pre;
+    }
+
+    .big { font-size: 1.4rem; margin-bottom: 0.5rem; }
+
+    .sub {
+      font-size: 0.95rem;
+      color: #aaa;
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    .casefile {
+      border: 1px solid #333;
+      padding: 1rem 1.5rem;
+      max-width: 480px;
+      width: 100%;
+      text-align: left;
+      margin-bottom: 2rem;
+      font-size: 0.85rem;
+      line-height: 2;
+    }
+
+    .label { color: #555; }
+    .val { color: #fff; }
+
+    .bar-wrap {
+      width: 100%;
+      max-width: 480px;
+      margin-bottom: 2rem;
+      text-align: left;
+      font-size: 0.8rem;
+    }
+
+    .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .bar-label { color: #555; width: 140px; flex-shrink: 0; }
+    .bar-bg { flex: 1; height: 10px; background: #111; border: 1px solid #333; }
+    .bar-fill { height: 100%; background: #fff; transition: width 0.05s; }
+
+    .btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+    button {
+      background: #000;
+      color: #fff;
+      border: 1px solid #fff;
+      padding: 0.5rem 1.2rem;
+      font-family: 'Fixedsys Excelsior', 'Fixedsys', 'Courier New', monospace;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    button:hover { background: #fff; color: #000; }
+
+    #shame {
+      font-size: 0.8rem;
+      color: #444;
+      margin-top: 1.5rem;
+      min-height: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <pre class="scanline" id="boot"></pre>
+
+  <div class="big" id="header" style="display:none">
+    !! INTRUDER DETECTED !!<span class="blink">_</span>
+  </div>
+
+  <div class="sub" id="msg" style="display:none">
+    Stop snooping around. Go back in game.<br>
+    There's nothing much to be found in this domain anyway.<br>
+    <span style="color:#555">(we checked. twice. it's just divs.)</span>
+  </div>
+
+  <div class="casefile" id="case" style="display:none">
+    <div style="color:#555; margin-bottom:0.5rem;">-- CASE FILE #00042 --</div>
+    <div><span class="label">SUSPECT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span><span class="val" id="cf-name">Loading...</span></div>
+    <div><span class="label">THREAT LEVEL : </span><span class="val">Mildly Curious</span></div>
+    <div><span class="label">CRIME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span><span class="val">Reading source code on a Friday</span></div>
+    <div><span class="label">MOTIVE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span><span class="val">Unknown. Possibly boredom.</span></div>
+    <div><span class="label">EVIDENCE&nbsp;&nbsp;&nbsp;&nbsp;: </span><span class="val">You're literally here right now</span></div>
+  </div>
+
+  <div class="bar-wrap" id="bars" style="display:none">
+    <div style="color:#555; font-size:0.8rem; margin-bottom:0.5rem;">-- THREAT ASSESSMENT --</div>
+    <div class="bar-row"><span class="bar-label">Nosiness</span><div class="bar-bg"><div class="bar-fill" id="b1" style="width:0%"></div></div></div>
+    <div class="bar-row"><span class="bar-label">Audacity</span><div class="bar-bg"><div class="bar-fill" id="b2" style="width:0%"></div></div></div>
+    <div class="bar-row"><span class="bar-label">Finding anything</span><div class="bar-bg"><div class="bar-fill" id="b3" style="width:0%"></div></div></div>
+  </div>
+
+  <div class="btns" id="btns" style="display:none">
+    <button id="btn-back">[ GO BACK TO MINECRAFT]</button>
+    <button id="btn-deny">[ I WASN'T SNOOPING ]</button>
+  </div>
+
+  <div id="shame"></div>
+
+  <script>
+    const names = [
+      "A Suspicious Individual",
+      "An Unknown Entity",
+      "Dave (probably)",
+      "Definitely Not A Developer",
+      "A Curious Gremlin",
+      "Player #4192",
+      "The Void, Staring Back"
+    ];
+
+    const bootLines = [
+      "INITIALIZING SECURITY PROTOCOL v0.0.1...",
+      "SCANNING FOR INTRUDERS...",
+      "oh.",
+      "oh no.",
+      "yep. there's one.",
+      "RUNNING THREAT ANALYSIS...",
+      "COMPILING SHAME REPORT...",
+      "DONE.",
+      ""
+    ];
+
+    const shames = [
+      "you weren't snooping? you are literally in the source code right now.",
+      "outstanding denial. truly. zero credibility.",
+      "the logs disagree.",
+      "sure buddy.",
+      "we've noted your protest. in the shame ledger.",
+      "a bold claim from someone inside a <div>.",
+    ];
+
+    let shameCount = 0;
+
+    async function boot() {
+      const el = document.getElementById('boot');
+      for (const line of bootLines) {
+        await delay(line === '' ? 100 : 280 + Math.random() * 180);
+        el.textContent += line + '\n';
+      }
+      document.getElementById('header').style.display = 'block';
+      await delay(400);
+      document.getElementById('case').style.display = 'block';
+      document.getElementById('cf-name').textContent = names[Math.floor(Math.random() * names.length)];
+      await delay(500);
+      document.getElementById('msg').style.display = 'block';
+      await delay(400);
+      document.getElementById('bars').style.display = 'block';
+      animateBars();
+      await delay(800);
+      document.getElementById('btns').style.display = 'flex';
+    }
+
+    function animateBars() {
+      const targets = [92, 87, 3];
+      const ids = ['b1', 'b2', 'b3'];
+      ids.forEach((id, i) => {
+        let w = 0;
+        const target = targets[i];
+        const step = () => {
+          w = Math.min(w + 2 + Math.random() * 3, target);
+          document.getElementById(id).style.width = Math.round(w) + '%';
+          if (w < target) requestAnimationFrame(step);
+        };
+        setTimeout(() => requestAnimationFrame(step), i * 200);
+      });
+    }
+
+    function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    document.getElementById('btn-back').addEventListener('click', () => {
+      document.getElementById('shame').textContent = 'wise choice. we will not speak of this.';
+    });
+
+    document.getElementById('btn-deny').addEventListener('click', () => {
+      document.getElementById('shame').textContent = shames[shameCount % shames.length];
+      shameCount++;
+    });
+
+    boot();
+  </script>
+</body>
+</html>
